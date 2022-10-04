@@ -5,10 +5,16 @@ import 'package:news_app/constants/app_colors.dart';
 import 'package:news_app/screens/home.dart';
 import 'package:news_app/screens/news_screen.dart';
 import 'package:news_app/services/http_service.dart';
+import 'package:news_app/services/permission_services.dart';
 import 'package:news_app/widgets/news_option.dart';
 
 void main() {
   runApp(const MyApp());
+}
+
+Future appInitialise() async {
+  await PermissionServices.askPermission();
+  await HttpService.initialise();
 }
 
 class MyApp extends StatelessWidget {
@@ -34,7 +40,7 @@ class MyApp extends StatelessWidget {
                   fontFamily: 'Roboto-slab',
                   scaffoldBackgroundColor: Color(0xff424242)),
               home: FutureBuilder(
-                future: HttpService.initialise(),
+                future: appInitialise(),
                 builder: ((context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     return Home();
