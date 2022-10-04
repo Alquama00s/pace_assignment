@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:news_app/constants/app_colors.dart';
 import 'package:news_app/screens/home.dart';
 import 'package:news_app/screens/news_screen.dart';
+import 'package:news_app/services/http_service.dart';
 import 'package:news_app/widgets/news_option.dart';
 
 void main() {
@@ -32,7 +33,17 @@ class MyApp extends StatelessWidget {
                   primarySwatch: AppColors.primaryMaterialColor,
                   fontFamily: 'Roboto-slab',
                   scaffoldBackgroundColor: Color(0xff424242)),
-              home: Home(),
+              home: FutureBuilder(
+                future: HttpService.initialise(),
+                builder: ((context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Home();
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }),
+              ),
             ));
   }
 }

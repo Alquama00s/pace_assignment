@@ -1,17 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:news_app/models/article.dart';
 import 'package:news_app/screens/news_screen.dart';
 import 'package:news_app/utils/image_provider.dart';
 
 class NewsOption extends StatelessWidget {
-  const NewsOption({super.key});
-
+  const NewsOption({super.key, required this.article});
+  final Article article;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.push(
-          context, MaterialPageRoute(builder: (context) => NewsScreen())),
+          context,
+          MaterialPageRoute(
+              builder: (context) => NewsScreen(
+                    article: article,
+                  ))),
       child: SizedBox(
         height: 220.h,
         child: Stack(
@@ -19,7 +24,7 @@ class NewsOption extends StatelessWidget {
             Container(
               margin: EdgeInsets.all(10),
               child: CachedImageContainer(
-                imgUrl: "",
+                imgUrl: article.urlToImage,
               ),
             ),
             Container(
@@ -44,7 +49,7 @@ class NewsOption extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Do not upload the project to any online version control. This will disqualify the assignment immediately',
+                    article.title,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 20.sp, color: Color(0xfff2f2f2)),
@@ -53,7 +58,7 @@ class NewsOption extends StatelessWidget {
                     height: 24.h,
                   ),
                   Text(
-                    'CNN      2019-07-03',
+                    '${article.source.name}      ${article.publishedAt.substring(0, 10)}',
                     style: TextStyle(fontSize: 12.sp, color: Color(0xffbababa)),
                   ),
                 ],
